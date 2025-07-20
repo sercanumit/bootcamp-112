@@ -1,4 +1,4 @@
-# 🚀 Üniversiteye Hazırlık Asistanı
+# 🚀 YÖN: Hedefine Doğru
 
 - [Genel Bilgiler](#genel-bilgiler)
 - [Sprint Bilgileri](#sprint)
@@ -20,7 +20,7 @@
 | Emir Efe YURTSEVEN | Developer                 |
 | Sercan Ümit ÖNER   | Scrum Master / Developer  |
 
-- **Ürün İsmi:** **-**
+- **Ürün İsmi:** **YÖN: _Hedefine Doğru_**
 - **Backlog URL:** [GitHub Projects](https://github.com/users/sercanumit/projects/2)
 - **Ürün Açıklaması:**  
   Üniversite sınavına hazırlanan öğrenciler için geliştirilen bu uygulama; öğrencilerin her dersten soru çözebileceği, eksik konularını görebileceği ve yapay zeka destekli koçluk hizmeti alabileceği bir dijital eğitim asistanıdır.
