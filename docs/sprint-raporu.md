@@ -55,6 +55,7 @@
 ### Sprintler
 
 - [1. Sprint](#1-sprint)
+- [2. Sprint](#2-sprint)
 
 <details id="1-sprint">
 <summary>1. Sprint</summary>
@@ -71,7 +72,7 @@
 #### Sprint İçinde Tamamlanması Tahmin Edilen Puan
 
 - **Tahmini Puan:** 26
-- **Açıklama:** Bu sprintte, takım değişikliği göz önünde bulundurularak toplam **26 story point**'lik işin tamamlanması planlanmıştır.
+- **Açıklama:** Bu sprintte, takım değişikliği göz önüne bulundurularak toplam **26 story point**'lik işin tamamlanması planlanmıştır.
 
 #### Puan Tamamlama Mantığı
 
@@ -142,5 +143,77 @@ Ancak, proje fikrimizi somutlaştırmak adına **konsept tasarımlar** hazırlad
 - Önümüzdeki sprintte proje görevlerine geçiş yapılması için gerekli temel (rol paylaşımı, fikir netliği, proje hedefi) sağlandı.
 - Gelecek sprintte daha gerçekçi planlama ve zaman yönetimi yapılması gerektiğini fark ettik.
 - Süreç içerisindeki belirsizlikleri daha hızlı netleştirmek için karar alma süreçleri iyileştirilebilir.
+
+</details>
+
+<details id="2-sprint">
+<summary>2. Sprint</summary>
+
+##### Sprint Tarihleri
+
+- Başlangıç: 07.07.2025
+- Bitiş: 20.07.2025
+
+#### Sprint Notları
+
+- Bu sprintte React Native ile mobil uygulama geliştirme sürecine başlandı. Öncelikli olarak uygulamanın ana ekranı olan **Dashboard** arayüzü tasarlandı ve kodlandı.
+- Backend tarafında **Firebase ve Django** kullanarak hibrit bir altyapı oluşturma çalışmaları başladı. Soruların resim olarak yüklenip metne dönüştürülerek **Gemini AI**'a gönderilmesi için bir akış tasarlandı.
+- Veritabanı tarafında konular, sınav türleri (TYT/AYT) ve öğrenci yol haritası (roadmap) için modelleme ve yapılandırma araştırmaları yapıldı.
+
+#### Sprint İçinde Tamamlanması Tahmin Edilen Puan
+
+- **Tahmini Puan:** 55
+- **Açıklama:** Bu sprintte, takımın tam zamanlı çalışmaya başlamasıyla birlikte **55 story point**'lik işin tamamlanması hedeflenmiştir. Ancak takım içi katılım sorunları nedeniyle hedefe ulaşılamamıştır.
+
+#### Puan Tamamlama Mantığı
+
+- Toplam 150 puanlık hedefin ilk sprintte 24’ü tamamlandı. Kalan 126 puanı iki sprinte eşit (63’er puan) bölmeyi planladık. Ancak katılım eksikliği nedeniyle bu sprintte hedef 55 puana düşürüldü. Yine de yalnızca Sercan ve Yusuf aktif çalışabildiği için bu hedefe ulaşılamadı.
+
+### Daily Scrum
+
+- Daily Scrum toplantıları ağırlıklı olarak WhatsApp üzerinden yazılı olarak yapıldı. Gerekli durumlarda Slack üzerinden görüntülü görüşmeler düzenlendi.
+- Yusuf ve Sercan, uygulama fonksiyonları ve tasarımları üzerine ortak bir şekilde çalıştı.
+
+<details>
+<summary>Görsel 1</summary>
+
+![WhatsApp Daily](./images/daily3.png)
+
+</details>
+
+#### Sprint Board Screenshotları
+
+<details>
+<summary>Görsel 1</summary>
+
+![Sprint 2 Board](./images/board1.png)
+
+</details>
+
+### Ürün Durumu: Ekran Görüntüleri
+
+Bu sprint itibarıyla kodlama aşamasına geçilmiştir. Mobil uygulamanın ilk ekranları ve temel bileşenleri geliştirilmiştir.
+
+<details>
+<summary>Görseller</summary>
+
+#### 📱 Mobil Uygulama
+
+![Uygulama Dashboard](./images/app-dashboard.jpeg)
+
+</details>
+
+#### Sprint Review
+
+- Sprint başında hedeflenen 55 story point'lik işin bir kısmı, aktif çalışan ekip üyelerinin çabasıyla tamamlanabildi.
+- **Dashboard tasarımı ve kodlaması** başarıyla tamamlandı.
+- Takım üyelerinden Furkan'ın kişisel işleri nedeniyle katılımı sınırlı oldu. Sinem ve Emir Efe ise sprinte hiç dahil olamadı. Bu durum, sprint hedeflerine ulaşılmasını engelledi.
+- Backend tarafında ise Firebase ve Django hibrit yapısı için temel hazırlıklar yapıldı.
+
+#### Sprint Retrospective
+
+- Takımın tamamının sürece dahil olamaması, sprint planlamasının ve hedeflerin gerçekçiliğini sorgulattı. Gelecek sprintlerde **rol ve sorumlulukların** daha net belirlenmesi gerektiği anlaşıldı.
+- WhatsApp üzerinden yapılan günlük güncellemeler hızlı olsa da, karmaşık konular için Slack veya yüz yüze toplantıların daha verimli olduğu görüldü.
+- Gelecek sprint için takımın katılım durumuna göre daha **gerçekçi bir hedef** belirlenmesi kararlaştırıldı.
 
 </details>
