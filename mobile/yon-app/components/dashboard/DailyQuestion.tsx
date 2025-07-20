@@ -1,117 +1,100 @@
-import { StyleSheet, View, TouchableOpacity } from "react-native";
-import { ThemedText } from "@/components/ThemedText";
+import { StyleSheet, View } from "react-native";
+import { Card, Text, Button, Chip, RadioButton } from "react-native-paper";
 import { ThemedView } from "@/components/ThemedView";
 import { DifficultyBadge } from "@/components/ui/DifficultyBadge";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useAppTheme } from "@/constants/PaperTheme";
+import { useState } from "react";
 
 export function DailyQuestion() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
+  const theme = useAppTheme();
+  const [selectedOption, setSelectedOption] = useState("");
 
   const currentDifficulty = "Orta";
+  const options = [
+    { text: "x = 0" },
+    { text: "x = 1/3" },
+    { text: "x = 2" },
+    { text: "x = 1" },
+    { text: "x = -1" },
+  ];
+
+  // Şık harflerini oluştur (A, B, C, D, E, ...)
+  const getOptionLetter = (index: number) => String.fromCharCode(65 + index);
 
   return (
     <ThemedView style={styles.container}>
       <View style={styles.sectionHeader}>
-        <ThemedText type="subtitle" style={styles.sectionTitle}>
+        <Text variant="titleLarge" style={styles.sectionTitle}>
           Günün Sorusu
-        </ThemedText>
-        <DifficultyBadge difficulty={currentDifficulty} size="medium" />
+        </Text>
       </View>
 
-      <View
-        style={[
-          styles.questionCard,
-          { backgroundColor: colors.cardBackground },
-        ]}
-      >
-        <View style={styles.questionHeader}>
-          <View style={styles.subjectInfo}>
-            <ThemedText style={[styles.subject, { color: colors.tint }]}>
-              Matematik
-            </ThemedText>
-            <ThemedText style={[styles.topic, { color: colors.icon }]}>
-              Türev Uygulamaları
-            </ThemedText>
+      <Card mode="elevated" style={styles.questionCard}>
+        <Card.Content>
+          <View style={styles.questionHeader}>
+            <View style={styles.subjectInfo}>
+              <Text
+                variant="titleMedium"
+                style={[styles.subject, { color: theme.colors.primary }]}
+              >
+                Matematik
+              </Text>
+              <Text
+                variant="bodySmall"
+                style={[styles.topic, { color: theme.colors.onSurfaceVariant }]}
+              >
+                Türev Uygulamaları
+              </Text>
+            </View>
+            <DifficultyBadge difficulty={currentDifficulty} size="small" />
           </View>
-          <View style={styles.questionNumber}>
-            <ThemedText
-              style={[styles.questionNumberText, { color: colors.icon }]}
-            >
-              15/20
-            </ThemedText>
+
+          <View style={styles.questionContent}>
+            <Text variant="bodyLarge" style={styles.questionText}>
+              f(x) = x³ - 3x² + 2x + 1 fonksiyonunun yerel minimum noktasının x
+              koordinatı kaçtır?
+            </Text>
           </View>
-        </View>
 
-        <View style={styles.questionContent}>
-          <ThemedText style={styles.questionText}>
-            f(x) = x³ - 3x² + 2x + 1 fonksiyonunun yerel minimum noktasının x
-            koordinatı kaçtır?
-          </ThemedText>
-        </View>
+          <RadioButton.Group
+            onValueChange={setSelectedOption}
+            value={selectedOption}
+          >
+            {options.map((option, index) => {
+              const optionLetter = getOptionLetter(index);
+              return (
+                <View key={`option-${index}`} style={styles.optionContainer}>
+                  <RadioButton.Item
+                    label={`${optionLetter}) ${option.text}`}
+                    value={`option-${index}`}
+                    style={styles.radioItem}
+                    labelStyle={styles.optionText}
+                    position="leading"
+                  />
+                </View>
+              );
+            })}
+          </RadioButton.Group>
+        </Card.Content>
 
-        <View style={styles.options}>
-          <TouchableOpacity
-            style={[styles.option, { backgroundColor: colors.cardBackground }]}
+        <Card.Actions style={styles.cardActions}>
+          <Button
+            mode="contained-tonal"
+            onPress={() => {}}
+            style={styles.skipButton}
           >
-            <View style={[styles.optionCircle, { borderColor: colors.icon }]}>
-              <ThemedText style={[styles.optionLetter, { color: colors.icon }]}>
-                A
-              </ThemedText>
-            </View>
-            <ThemedText style={styles.optionText}>x = 1/3</ThemedText>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.option, { backgroundColor: colors.cardBackground }]}
+            Geç
+          </Button>
+          <Button
+            mode="contained"
+            onPress={() => {}}
+            style={styles.answerButton}
+            disabled={!selectedOption}
           >
-            <View style={[styles.optionCircle, { borderColor: colors.icon }]}>
-              <ThemedText style={[styles.optionLetter, { color: colors.icon }]}>
-                B
-              </ThemedText>
-            </View>
-            <ThemedText style={styles.optionText}>x = 2</ThemedText>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.option, { backgroundColor: colors.cardBackground }]}
-          >
-            <View style={[styles.optionCircle, { borderColor: colors.icon }]}>
-              <ThemedText style={[styles.optionLetter, { color: colors.icon }]}>
-                C
-              </ThemedText>
-            </View>
-            <ThemedText style={styles.optionText}>x = 1</ThemedText>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.option, { backgroundColor: colors.cardBackground }]}
-          >
-            <View style={[styles.optionCircle, { borderColor: colors.icon }]}>
-              <ThemedText style={[styles.optionLetter, { color: colors.icon }]}>
-                D
-              </ThemedText>
-            </View>
-            <ThemedText style={styles.optionText}>x = 0</ThemedText>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.actionButtons}>
-          <TouchableOpacity
-            style={[styles.skipButton, { borderColor: colors.icon }]}
-          >
-            <ThemedText style={[styles.skipButtonText, { color: colors.icon }]}>
-              Geç
-            </ThemedText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.answerButton, { backgroundColor: colors.tint }]}
-          >
-            <ThemedText style={styles.answerButtonText}>Cevapla</ThemedText>
-          </TouchableOpacity>
-        </View>
-      </View>
+            Cevapla
+          </Button>
+        </Card.Actions>
+      </Card>
     </ThemedView>
   );
 }
@@ -127,19 +110,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   sectionTitle: {
-    marginBottom: 0,
-    fontSize: 20,
     fontFamily: "Poppins_700Bold",
-    lineHeight: 28,
   },
   questionCard: {
-    padding: 20,
     borderRadius: 16,
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
   },
   questionHeader: {
     flexDirection: "row",
@@ -151,89 +125,41 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   subject: {
-    fontSize: 16,
     fontFamily: "Poppins_600SemiBold",
     marginBottom: 2,
   },
   topic: {
-    fontSize: 9,
-    lineHeight: 13,
     fontFamily: "Poppins_400Regular",
-  },
-  questionNumber: {
-    padding: 8,
-    borderRadius: 8,
-  },
-  questionNumberText: {
-    fontSize: 9,
-    lineHeight: 13,
-    fontFamily: "Poppins_600SemiBold",
   },
   questionContent: {
     marginBottom: 20,
   },
   questionText: {
-    fontSize: 16,
-    lineHeight: 26,
     fontFamily: "Poppins_400Regular",
+    lineHeight: 24,
   },
-  options: {
-    marginBottom: 20,
+  optionContainer: {
+    marginVertical: 2,
   },
-  option: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  optionCircle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
-  },
-  optionLetter: {
-    fontSize: 10,
-    lineHeight: 14,
-    fontFamily: "Poppins_600SemiBold",
+  radioItem: {
+    paddingLeft: 0,
   },
   optionText: {
-    fontSize: 12,
-    lineHeight: 18,
     fontFamily: "Poppins_400Regular",
+    fontSize: 14,
+    textAlign: "left",
   },
-  actionButtons: {
-    flexDirection: "row",
+  cardActions: {
     justifyContent: "space-between",
-    gap: 12,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
   },
   skipButton: {
     flex: 1,
-    paddingVertical: 12,
-    borderRadius: 10,
-    borderWidth: 1,
-    alignItems: "center",
-  },
-  skipButtonText: {
-    fontSize: 12,
-    lineHeight: 18,
-    fontFamily: "Poppins_600SemiBold",
+    marginRight: 8,
   },
   answerButton: {
     flex: 1,
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  answerButtonText: {
-    color: "#fff",
-    fontSize: 12,
-    lineHeight: 18,
-    fontFamily: "Poppins_600SemiBold",
+    marginLeft: 8,
   },
 });

@@ -1,11 +1,30 @@
-import { StyleSheet, Text, type TextProps } from "react-native";
+import { StyleSheet, type TextProps } from "react-native";
+import { Text } from "react-native-paper";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { useAppTheme } from "@/constants/PaperTheme";
 
-export type ThemedTextProps = TextProps & {
+export type ThemedTextProps = Omit<TextProps, "children"> & {
+  children?: React.ReactNode;
   lightColor?: string;
   darkColor?: string;
   type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
+  variant?:
+    | "displayLarge"
+    | "displayMedium"
+    | "displaySmall"
+    | "headlineLarge"
+    | "headlineMedium"
+    | "headlineSmall"
+    | "titleLarge"
+    | "titleMedium"
+    | "titleSmall"
+    | "labelLarge"
+    | "labelMedium"
+    | "labelSmall"
+    | "bodyLarge"
+    | "bodyMedium"
+    | "bodySmall";
 };
 
 export function ThemedText({
@@ -13,14 +32,34 @@ export function ThemedText({
   lightColor,
   darkColor,
   type = "default",
+  variant,
+  children,
   ...rest
 }: ThemedTextProps) {
+  const theme = useAppTheme();
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
 
+  // Eğer variant belirtildiyse Paper'ın Text bileşenini kullan
+  if (variant) {
+    return (
+      <Text
+        variant={variant}
+        style={[
+          { color: lightColor || darkColor || theme.colors.onSurface },
+          style,
+        ]}
+        {...rest}
+      >
+        {children}
+      </Text>
+    );
+  }
+
+  // Geleneksel tip sistemini koruyalım
   return (
     <Text
       style={[
-        { color },
+        { color: color as string },
         type === "default" ? styles.default : undefined,
         type === "title" ? styles.title : undefined,
         type === "defaultSemiBold" ? styles.defaultSemiBold : undefined,
@@ -29,7 +68,9 @@ export function ThemedText({
         style,
       ]}
       {...rest}
-    />
+    >
+      {children}
+    </Text>
   );
 }
 
