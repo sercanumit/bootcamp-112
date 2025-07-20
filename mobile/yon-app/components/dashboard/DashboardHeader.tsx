@@ -1,42 +1,70 @@
-import { StyleSheet, View, Image } from "react-native";
-import { IconSymbol } from "@/components/ui/IconSymbol";
-import { ThemedText } from "@/components/ThemedText";
+import { StyleSheet, View } from "react-native";
+import { Text, Avatar, IconButton, Badge, Divider } from "react-native-paper";
 import { ThemedView } from "@/components/ThemedView";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useAppTheme } from "@/constants/PaperTheme";
 
 export function DashboardHeader() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
+  const theme = useAppTheme();
 
   return (
     <ThemedView style={styles.container}>
+      {/* Header */}
       <View style={styles.headerContent}>
+        {/* Profil */}
         <View style={styles.profileSection}>
-          <View style={[styles.avatarContainer, { borderColor: colors.tint }]}>
-            <Image
-              source={{ uri: "https://via.placeholder.com/60" }}
+          <View style={styles.avatarContainer}>
+            <Avatar.Image
+              size={48}
+              source={{ uri: "https://picsum.photos/20" }}
               style={styles.avatar}
+            />
+            <Badge
+              visible={true}
+              style={[
+                styles.onlineBadge,
+                { backgroundColor: theme.colors.primary },
+              ]}
+              size={12}
             />
           </View>
           <View style={styles.profileInfo}>
-            <ThemedText type="title" style={styles.name}>
+            <Text variant="titleMedium" style={styles.name}>
               Ahmet Yılmaz
-            </ThemedText>
-            <ThemedText style={[styles.classInfo, { color: colors.tint }]}>
-              12. Sınıf • Hedef: Tıp Fakültesi
-            </ThemedText>
+            </Text>
+            <View style={styles.profileDetails}>
+              <Text variant="bodySmall" style={styles.classText}>
+                12. Sınıf • Tıp Fakültesi
+              </Text>
+            </View>
           </View>
         </View>
-        <View style={styles.notificationContainer}>
-          <IconSymbol name="house.fill" size={24} color={colors.icon} />
+
+        <View style={styles.actionButtons}>
+          <IconButton
+            icon="bell-outline"
+            mode="contained-tonal"
+            size={20}
+            onPress={() => {}}
+            style={styles.actionButton}
+          />
+          <IconButton
+            icon="cog-outline"
+            mode="contained-tonal"
+            size={20}
+            onPress={() => {}}
+            style={styles.actionButton}
+          />
         </View>
       </View>
-      <View style={[styles.motivationCard, { backgroundColor: colors.tint }]}>
-        <ThemedText style={styles.motivationText}>
-          "Bugün dün yapamadığının yapılacağı gün!"
-        </ThemedText>
+
+      {/* Motivasyon  */}
+      <View style={styles.motivationContainer}>
+        <Text variant="bodyMedium" style={styles.motivationText}>
+          "Her büyük başarı küçük adımlarla başlar"
+        </Text>
       </View>
+
+      <Divider style={styles.divider} />
     </ThemedView>
   );
 }
@@ -45,12 +73,12 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     paddingTop: 50,
+    gap: 16,
   },
   headerContent: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
   },
   profileSection: {
     flexDirection: "row",
@@ -58,49 +86,53 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   avatarContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    borderWidth: 3,
-    padding: 2,
+    position: "relative",
+    marginRight: 16,
   },
   avatar: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 25,
+    backgroundColor: "#f0f0f0",
+  },
+  onlineBadge: {
+    position: "absolute",
+    bottom: 2,
+    right: 2,
+    borderWidth: 2,
+    borderColor: "#fff",
   },
   profileInfo: {
-    marginLeft: 15,
     flex: 1,
   },
   name: {
-    fontSize: 22,
     marginBottom: 4,
-    lineHeight: 28,
+    fontWeight: "600",
   },
-  classInfo: {
-    fontSize: 11,
-    lineHeight: 16,
-    fontFamily: "Poppins_600SemiBold",
-  },
-  notificationContainer: {
-    padding: 8,
-  },
-  motivationCard: {
-    borderRadius: 16,
-    padding: 15,
+  profileDetails: {
+    flexDirection: "row",
     alignItems: "center",
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
+  },
+  classText: {
+    fontSize: 13,
+    opacity: 0.7,
+  },
+  actionButtons: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  actionButton: {
+    margin: 0,
+  },
+  motivationContainer: {
+    paddingTop: 8,
+    paddingHorizontal: 4,
   },
   motivationText: {
-    color: "#fff",
-    fontSize: 13,
-    lineHeight: 20,
-    fontFamily: "Poppins_600SemiBold",
     textAlign: "center",
+    fontStyle: "italic",
+    opacity: 0.8,
+    fontSize: 14,
+  },
+  divider: {
+    marginTop: 8,
+    opacity: 0.3,
   },
 });

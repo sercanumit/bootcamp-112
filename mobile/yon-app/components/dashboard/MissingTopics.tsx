@@ -1,10 +1,8 @@
-import { StyleSheet, View, TouchableOpacity } from "react-native";
-import { ThemedText } from "@/components/ThemedText";
+import { StyleSheet, View } from "react-native";
+import { Card, Text, List, Button, IconButton } from "react-native-paper";
 import { ThemedView } from "@/components/ThemedView";
-import { IconSymbol } from "@/components/ui/IconSymbol";
 import { DifficultyBadge } from "@/components/ui/DifficultyBadge";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useAppTheme } from "@/constants/PaperTheme";
 
 interface TopicItemProps {
   subject: string;
@@ -19,39 +17,71 @@ function TopicItem({
   difficulty,
   questionCount,
 }: TopicItemProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
+  const theme = useAppTheme();
 
   return (
-    <TouchableOpacity
-      style={[styles.topicItem, { backgroundColor: colors.cardBackground }]}
+    <Card
+      mode="elevated"
+      style={[
+        styles.topicCard,
+        { backgroundColor: theme.colors.elevation.level2 },
+      ]}
+      elevation={2}
+      onPress={() => {}}
     >
-      <View style={styles.topicHeader}>
-        <View style={styles.topicInfo}>
-          <ThemedText type="defaultSemiBold" style={styles.topicTitle}>
-            {topic}
-          </ThemedText>
-          <ThemedText style={[styles.subject, { color: colors.icon }]}>
-            {subject}
-          </ThemedText>
+      <Card.Content style={styles.cardContent}>
+        {/* Header with subject and difficulty badge */}
+        <View style={styles.cardHeader}>
+          <View style={styles.subjectContainer}>
+            <Text
+              variant="labelMedium"
+              style={[styles.subject, { color: theme.colors.primary }]}
+            >
+              {subject}
+            </Text>
+          </View>
+          <DifficultyBadge difficulty={difficulty} size="small" />
         </View>
-        <View style={styles.topicMeta}>
-          <DifficultyBadge difficulty={difficulty} size="medium" />
-          <ThemedText style={[styles.questionCount, { color: colors.icon }]}>
-            {questionCount} soru
-          </ThemedText>
+
+        {/* Main content with button */}
+        <View style={styles.cardBody}>
+          <View style={styles.topicInfo}>
+            <Text
+              variant="titleMedium"
+              style={[styles.topicTitle, { color: theme.colors.onSurface }]}
+              numberOfLines={2}
+            >
+              {topic}
+            </Text>
+
+            <Text
+              variant="bodySmall"
+              style={[
+                styles.questionCount,
+                { color: theme.colors.onSurfaceVariant },
+              ]}
+            >
+              {questionCount} soru mevcut
+            </Text>
+          </View>
+
+          {/* Action button positioned at bottom right */}
+          <IconButton
+            icon="arrow-right-bottom"
+            size={28}
+            iconColor={theme.colors.primary}
+            containerColor="transparent"
+            style={styles.practiceButton}
+            onPress={() => {}}
+          />
         </View>
-      </View>
-      <View style={styles.actionRow}>
-        <IconSymbol name="chevron.right" size={16} color={colors.tint} />
-      </View>
-    </TouchableOpacity>
+      </Card.Content>
+    </Card>
   );
 }
 
 export function MissingTopics() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
+  const theme = useAppTheme();
 
   const missingTopics = [
     {
@@ -77,14 +107,12 @@ export function MissingTopics() {
   return (
     <ThemedView style={styles.container}>
       <View style={styles.sectionHeader}>
-        <ThemedText type="subtitle" style={styles.sectionTitle}>
+        <Text variant="titleLarge" style={styles.sectionTitle}>
           Eksik Konular
-        </ThemedText>
-        <TouchableOpacity>
-          <ThemedText style={[styles.viewAll, { color: colors.tint }]}>
-            Tümünü Gör
-          </ThemedText>
-        </TouchableOpacity>
+        </Text>
+        <Button mode="text" onPress={() => {}}>
+          Tümünü Gör
+        </Button>
       </View>
 
       <View style={styles.topicsList}>
@@ -113,56 +141,55 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   sectionTitle: {
-    marginBottom: 0,
-    fontSize: 20,
     fontFamily: "Poppins_700Bold",
-    lineHeight: 28,
-  },
-  viewAll: {
-    fontSize: 12,
-    lineHeight: 18,
-    fontFamily: "Poppins_600SemiBold",
   },
   topicsList: {
     gap: 12,
   },
-  topicItem: {
-    padding: 15,
-    borderRadius: 14,
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
+  topicCard: {
+    borderRadius: 16,
+    marginVertical: 2,
   },
-  topicHeader: {
+  cardContent: {
+    padding: 14,
+  },
+  cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginBottom: 10,
+    marginBottom: 8,
+  },
+  subjectContainer: {
+    flex: 1,
+  },
+  subject: {
+    fontFamily: "Poppins_600SemiBold",
+    fontSize: 12,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  cardBody: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
   },
   topicInfo: {
     flex: 1,
+    paddingRight: 12,
   },
   topicTitle: {
+    fontFamily: "Poppins_600SemiBold",
     fontSize: 16,
-    marginBottom: 4,
     lineHeight: 22,
-  },
-  subject: {
-    fontSize: 9,
-    lineHeight: 13,
-    fontFamily: "Poppins_400Regular",
-  },
-  topicMeta: {
-    alignItems: "flex-end",
+    marginBottom: 4,
   },
   questionCount: {
-    fontSize: 9,
-    lineHeight: 13,
     fontFamily: "Poppins_400Regular",
+    fontSize: 12,
   },
-  actionRow: {
-    alignItems: "flex-end",
+  practiceButton: {
+    borderRadius: 20,
+    margin: 0,
+    backgroundColor: "transparent",
   },
 });

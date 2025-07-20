@@ -1,104 +1,181 @@
 import { StyleSheet, View } from "react-native";
-import { ThemedText } from "@/components/ThemedText";
+import { Text, Card, Button } from "react-native-paper";
 import { ThemedView } from "@/components/ThemedView";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { LinearGradient } from "expo-linear-gradient";
-
-interface StatCardProps {
-  title: string;
-  value: string;
-  subtitle?: string;
-  color?: string;
-}
-
-function StatCard({ title, value, subtitle, color }: StatCardProps) {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
-
-  return (
-    <View style={[styles.statCard, { backgroundColor: colors.cardBackground }]}>
-      <ThemedText style={[styles.statTitle, { color: colors.icon }]}>
-        {title}
-      </ThemedText>
-      <ThemedText style={[styles.statValue, { color: color || colors.tint }]}>
-        {value}
-      </ThemedText>
-      {subtitle && (
-        <ThemedText style={[styles.statSubtitle, { color: colors.icon }]}>
-          {subtitle}
-        </ThemedText>
-      )}
-    </View>
-  );
-}
+import { useAppTheme } from "@/constants/PaperTheme";
+import { PieChart } from "react-native-gifted-charts";
+import { IconSymbol } from "@/components/ui/IconSymbol";
 
 export function DashboardStats() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
+  const theme = useAppTheme();
+
+  // Donut chart verileri
+  const correctAnswers = 973;
+  const wrongAnswers = 274;
+  const totalQuestions = correctAnswers + wrongAnswers;
+  const correctPercentage = Math.round((correctAnswers / totalQuestions) * 100);
+
+  const pieData = [
+    {
+      value: correctAnswers,
+      color: theme.colors.primary,
+      gradientCenterColor: theme.colors.primary,
+      showGradient: true,
+    },
+    {
+      value: wrongAnswers,
+      color: theme.colors.secondary,
+      gradientCenterColor: theme.colors.secondary,
+      showGradient: true,
+    },
+  ];
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="subtitle" style={styles.sectionTitle}>
-        Genel Durum
-      </ThemedText>
+      <Text variant="titleLarge" style={styles.sectionTitle}>
+        Başarı İstatistikleri
+      </Text>
 
-      <View style={styles.statsGrid}>
-        <StatCard title="Toplam Soru" value="1,247" subtitle="Bu hafta +156" />
-        <StatCard
-          title="Doğru Oranı"
-          value="78%"
-          subtitle="Hedef: 85%"
-          color={colors.success}
-        />
-        <StatCard
-          title="Yanlış Soru"
-          value="274"
-          subtitle="Bu hafta -12"
-          color={colors.error}
-        />
-        <StatCard
-          title="Çalışma Süresi"
-          value="4.2h"
-          subtitle="Bugün"
-          color={colors.warning}
-        />
-      </View>
+      <View style={styles.statsLayout}>
+        {/* Sol: Chart ve Doğru/Yanlış */}
+        <View style={styles.leftSection}>
+          {/* Chart */}
+          <View style={styles.chartContainer}>
+            <PieChart
+              data={pieData}
+              donut
+              radius={64}
+              innerRadius={32}
+              innerCircleColor={theme.colors.surface}
+              isAnimated={false}
+              centerLabelComponent={() => (
+                <Text
+                  variant="labelMedium"
+                  style={[styles.centerText, { color: theme.colors.primary }]}
+                >
+                  {correctPercentage}%
+                </Text>
+              )}
+            />
+          </View>
 
-      <View
-        style={[
-          styles.progressCard,
-          { backgroundColor: colors.cardBackground },
-        ]}
-      >
-        <View style={styles.progressHeader}>
-          <ThemedText type="defaultSemiBold">Bu Hafta İlerleme</ThemedText>
-          <ThemedText
-            style={[styles.progressPercentage, { color: colors.tint }]}
-          >
-            65%
-          </ThemedText>
+          {/* Alt: Doğru/Yanlış */}
+          <View style={styles.chartLegend}>
+            <View style={styles.legendItem}>
+              <View
+                style={[
+                  styles.legendDot,
+                  { backgroundColor: theme.colors.primary },
+                ]}
+              />
+              <Text
+                variant="bodySmall"
+                style={[styles.legendText, { color: theme.colors.onSurface }]}
+              >
+                {correctAnswers.toString()} Doğru
+              </Text>
+            </View>
+
+            <View style={styles.legendItem}>
+              <View
+                style={[
+                  styles.legendDot,
+                  { backgroundColor: theme.colors.secondary },
+                ]}
+              />
+              <Text
+                variant="bodySmall"
+                style={[
+                  styles.legendText,
+                  {
+                    color: theme.colors.onSurface,
+                    fontFamily: undefined, // Use default font for Turkish character support
+                  },
+                ]}
+              >
+                {wrongAnswers.toString()} Yanlış
+              </Text>
+            </View>
+          </View>
         </View>
-        <View
-          style={[
-            styles.progressBarContainer,
-            { backgroundColor: colors.icon + "20" },
-          ]}
-        >
-          <LinearGradient
-            colors={
-              colorScheme === "dark"
-                ? ["#8c5cff", "#a673ff"]
-                : ["#6a5af9", "#8c4ef8"]
-            }
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={[styles.progressBar, { width: "65%" }]}
-          />
+
+        {/* Sağ: Toplam veri kartları */}
+        <View style={styles.rightSection}>
+          <View style={styles.cardsContainer}>
+            {/* Toplam Soru */}
+            <Card
+              style={[
+                styles.dataCard,
+                { backgroundColor: theme.colors.surfaceVariant },
+              ]}
+            >
+              <Card.Content style={styles.cardContent}>
+                <IconSymbol
+                  name="paperplane.fill"
+                  size={16}
+                  color={theme.colors.primary}
+                  style={styles.cardIcon}
+                />
+                <View style={styles.cardInfo}>
+                  <Text
+                    variant="labelSmall"
+                    style={[
+                      styles.cardLabel,
+                      { color: theme.colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Toplam Soru
+                  </Text>
+                  <Text
+                    variant="titleSmall"
+                    style={[
+                      styles.cardValue,
+                      { color: theme.colors.onSurface },
+                    ]}
+                  >
+                    {totalQuestions.toLocaleString("tr-TR")}
+                  </Text>
+                </View>
+              </Card.Content>
+            </Card>
+
+            {/* Çalışma Süresi */}
+            <Card
+              style={[
+                styles.dataCard,
+                { backgroundColor: theme.colors.surfaceVariant },
+              ]}
+            >
+              <Card.Content style={styles.cardContent}>
+                <IconSymbol
+                  name="star.fill"
+                  size={16}
+                  color={theme.colors.secondary}
+                  style={styles.cardIcon}
+                />
+                <View style={styles.cardInfo}>
+                  <Text
+                    variant="labelSmall"
+                    style={[
+                      styles.cardLabel,
+                      { color: theme.colors.onSurfaceVariant },
+                    ]}
+                  >
+                    Çalışma
+                  </Text>
+                  <Text
+                    variant="titleSmall"
+                    style={[
+                      styles.cardValue,
+                      { color: theme.colors.onSurface },
+                    ]}
+                  >
+                    4.2 saat
+                  </Text>
+                </View>
+              </Card.Content>
+            </Card>
+          </View>
         </View>
-        <ThemedText style={[styles.progressText, { color: colors.icon }]}>
-          Hedefine ulaşmak için günde 50 soru daha çözmelisin
-        </ThemedText>
       </View>
     </ThemedView>
   );
@@ -106,96 +183,85 @@ export function DashboardStats() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingBottom: 12,
   },
   sectionTitle: {
-    marginBottom: 16,
-    fontSize: 20,
+    marginBottom: 12,
     fontFamily: "Poppins_700Bold",
-    lineHeight: 28,
   },
-  statsGrid: {
+  statsLayout: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginBottom: 16,
+    alignItems: "flex-start",
+    backgroundColor: "rgba(112, 51, 255, 0.02)",
+    borderRadius: 16,
+    padding: 16,
+    gap: 16,
   },
-  statCard: {
-    width: "48%",
-    padding: 20,
-    borderRadius: 14,
-    marginBottom: 16,
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-  },
-  statTitle: {
-    fontSize: 9,
-    lineHeight: 13,
-    fontFamily: "Poppins_400Regular",
-    marginBottom: 5,
-  },
-  statValue: {
-    fontSize: 22,
-    fontFamily: "Poppins_700Bold",
-    marginBottom: 2,
-    lineHeight: 28,
-  },
-  statSubtitle: {
-    fontSize: 8,
-    lineHeight: 11,
-    fontFamily: "Poppins_400Regular",
-  },
-  progressCard: {
-    padding: 20,
-    borderRadius: 14,
-    marginTop: 0,
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-  },
-  progressHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  leftSection: {
     alignItems: "center",
-    marginBottom: 10,
   },
-  progressPercentage: {
-    fontSize: 16,
+  chartContainer: {
+    marginBottom: 12,
+  },
+  centerText: {
     fontFamily: "Poppins_700Bold",
-    lineHeight: 22,
+    fontSize: 19,
   },
-  progressBarContainer: {
+  chartLegend: {
+    alignItems: "center",
+    gap: 2,
+  },
+  legendItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 0,
+  },
+  legendDot: {
+    width: 8,
     height: 8,
     borderRadius: 4,
-    marginBottom: 10,
-    position: "relative",
-    justifyContent: "center",
+    marginRight: 6,
   },
-  progressBar: {
-    height: "100%",
-    borderRadius: 4,
-  },
-  progressValueContainer: {
-    position: "absolute",
-    alignSelf: "center",
-    zIndex: 1,
-  },
-  progressValue: {
-    fontSize: 10,
-    fontFamily: "Poppins_600SemiBold",
-    lineHeight: 14,
-    textShadowColor: "rgba(0,0,0,0.3)",
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
-  },
-  progressText: {
-    fontSize: 9,
-    lineHeight: 14,
+  legendText: {
     fontFamily: "Poppins_400Regular",
+    fontSize: 12,
+    lineHeight: 16,
+    includeFontPadding: false,
+    textAlignVertical: "center",
+  },
+  rightSection: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+  cardsContainer: {
+    gap: 8,
+  },
+  dataCard: {
+    borderRadius: 12,
+    elevation: 0,
+  },
+  cardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+  },
+  cardIcon: {
+    marginRight: 8,
+  },
+  cardInfo: {
+    flex: 1,
+  },
+  cardLabel: {
+    fontFamily: "Poppins_400Regular",
+    fontSize: 10,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginBottom: 2,
+  },
+  cardValue: {
+    fontFamily: "Poppins_600SemiBold",
+    fontSize: 14,
   },
 });

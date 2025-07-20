@@ -1,7 +1,8 @@
+import React from "react";
 import { StyleSheet, View } from "react-native";
-import { ThemedText } from "@/components/ThemedText";
+import { Chip, Text } from "react-native-paper";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { Colors } from "@/constants/Colors";
+import { useAppTheme, additionalColors } from "@/constants/PaperTheme";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
 interface DifficultyBadgeProps {
@@ -13,111 +14,123 @@ export function DifficultyBadge({
   difficulty,
   size = "medium",
 }: DifficultyBadgeProps) {
+  const theme = useAppTheme();
   const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
 
-  const getDifficultyColor = (difficulty: string) => {
+  const getDifficultyConfig = (difficulty: string) => {
     switch (difficulty) {
       case "Kolay":
-        return colors.success;
+        return {
+          color: colorScheme === "dark" ? "#4caf50" : "#2e7d32",
+          backgroundColor: colorScheme === "dark" ? "#4caf5020" : "#2e7d3215",
+          icon: "star.fill",
+          textColor: colorScheme === "dark" ? "#4caf50" : "#2e7d32",
+        };
       case "Orta":
-        return colors.warning;
+        return {
+          color: colorScheme === "dark" ? "#ffa726" : "#f57c00",
+          backgroundColor: colorScheme === "dark" ? "#ffa72620" : "#f57c0015",
+          icon: "shield.fill",
+          textColor: colorScheme === "dark" ? "#ffa726" : "#f57c00",
+        };
       case "Zor":
-        return colors.error;
+        return {
+          color: theme.colors.error,
+          backgroundColor: colorScheme === "dark" ? "#f4433620" : "#d32f2f15",
+          icon: "flame.fill",
+          textColor: theme.colors.error,
+        };
       default:
-        return colors.tint;
+        return {
+          color: theme.colors.primary,
+          backgroundColor: theme.colors.primaryContainer,
+          icon: "star.fill",
+          textColor: theme.colors.primary,
+        };
     }
   };
 
-  const getDifficultyIcon = (difficulty: string) => {
-    switch (difficulty) {
-      case "Kolay":
-        return "star.fill";
-      case "Orta":
-        return "shield.fill";
-      case "Zor":
-        return "flame.fill";
-      default:
-        return "star.fill";
+  const getSizeConfig = () => {
+    switch (size) {
+      case "small":
+        return {
+          height: 22,
+          paddingHorizontal: 8,
+          fontSize: 10,
+          iconSize: 12,
+          borderRadius: 11,
+        };
+      case "large":
+        return {
+          height: 32,
+          paddingHorizontal: 12,
+          fontSize: 13,
+          iconSize: 16,
+          borderRadius: 16,
+        };
+      default: // medium
+        return {
+          height: 26,
+          paddingHorizontal: 10,
+          fontSize: 11,
+          iconSize: 14,
+          borderRadius: 13,
+        };
     }
   };
 
-  const sizeStyles = {
-    small: {
-      paddingHorizontal: 8,
-      paddingVertical: 4,
-      borderRadius: 12,
-      iconSize: 12,
-      fontSize: 9,
-      minWidth: 60,
-    },
-    medium: {
-      paddingHorizontal: 12,
-      paddingVertical: 6,
-      borderRadius: 16,
-      iconSize: 14,
-      fontSize: 10,
-      minWidth: 70,
-    },
-    large: {
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      borderRadius: 20,
-      iconSize: 16,
-      fontSize: 12,
-      minWidth: 80,
-    },
-  };
-
-  const currentSize = sizeStyles[size];
+  const config = getDifficultyConfig(difficulty);
+  const sizeConfig = getSizeConfig();
 
   return (
     <View
       style={[
-        styles.badge,
+        styles.container,
         {
-          backgroundColor: getDifficultyColor(difficulty),
-          paddingHorizontal: currentSize.paddingHorizontal,
-          paddingVertical: currentSize.paddingVertical,
-          borderRadius: currentSize.borderRadius,
-          minWidth: currentSize.minWidth,
+          backgroundColor: config.backgroundColor,
+          height: sizeConfig.height,
+          paddingHorizontal: sizeConfig.paddingHorizontal,
+          borderRadius: sizeConfig.borderRadius,
+          borderWidth: 1,
+          borderColor: config.color + "30",
         },
       ]}
     >
       <IconSymbol
-        name={getDifficultyIcon(difficulty)}
-        size={currentSize.iconSize}
-        color="#fff"
+        name={config.icon as any}
+        size={sizeConfig.iconSize}
+        color={config.color}
+        style={styles.icon}
       />
-      <ThemedText
+      <Text
+        variant="labelSmall"
         style={[
           styles.text,
           {
-            fontSize: currentSize.fontSize,
+            color: config.textColor,
+            fontSize: sizeConfig.fontSize,
+            fontFamily: "Poppins_600SemiBold",
           },
         ]}
       >
         {difficulty}
-      </ThemedText>
+      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  badge: {
+  container: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
     justifyContent: "center",
-    elevation: 1,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    alignSelf: "flex-start",
+  },
+  icon: {
+    marginRight: 4,
   },
   text: {
-    color: "#fff",
-    lineHeight: 14,
-    fontFamily: "Poppins_600SemiBold",
+    fontWeight: "600",
+    lineHeight: undefined,
   },
 });
