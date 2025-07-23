@@ -1,35 +1,89 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import { Text, Card, Icon } from "react-native-paper";
+import React, { useState } from "react";
+import { StyleSheet, ScrollView } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
-import { useAppTheme } from "@/constants/PaperTheme";
+import {
+  QuestionBoxHeader,
+  SubjectFilter,
+  QuestionCarousel,
+  QuestionModal,
+} from "@/components/question-box";
+import { MOCK_QUESTIONS } from "@/data/mockQuestions";
+import { Question } from "@/types";
+import {
+  filterQuestionsBySubject,
+  getWrongQuestions,
+  getBookmarkedQuestions,
+} from "@/utils/questionUtils";
 
-export default function PracticeScreen() {
-  const theme = useAppTheme();
+export default function QuestionBoxScreen() {
+  const [selectedSubject, setSelectedSubject] = useState("Tümü");
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
+    null
+  );
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Filter questions based on selected subject
+  const filteredQuestions = filterQuestionsBySubject(
+    MOCK_QUESTIONS,
+    selectedSubject
+  );
+
+  const wrongQuestions = getWrongQuestions(filteredQuestions);
+  const bookmarkedQuestions = getBookmarkedQuestions(filteredQuestions);
+
+  const handleQuestionPress = (question: Question) => {
+    setSelectedQuestion(question);
+    setIsModalVisible(true);
+  };
+
+  const handleModalDismiss = () => {
+    setIsModalVisible(false);
+    setSelectedQuestion(null);
+  };
 
   return (
     <ThemedView style={styles.container}>
-      <View style={styles.centerContainer}>
-        <Card style={styles.developmentCard} mode="elevated">
-          <Card.Content style={styles.cardContent}>
-            <Icon
-              source="file-question-outline"
-              size={64}
-              color={theme.colors.primary}
-            />
-            <Text variant="headlineMedium" style={styles.title}>
-              Soru Kutusu
-            </Text>
-            <Text variant="bodyLarge" style={styles.subtitle}>
-              Bu bölüm geliştiriliyor
-            </Text>
-            <Text variant="bodyMedium" style={styles.description}>
-              Yakında burada işaretlediklerinizi, yanlış yaptığınız ve takip
-              ettiğiniz soruları bulabileceksiniz.
-            </Text>
-          </Card.Content>
-        </Card>
-      </View>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.contentContainer}
+      >
+        {/* Header */}
+        <QuestionBoxHeader />
+
+        {/* Subject Filter */}
+        <SubjectFilter
+          selectedSubject={selectedSubject}
+          onSubjectChange={setSelectedSubject}
+        />
+
+        {/* Wrong Questions Carousel */}
+        <QuestionCarousel
+          title="Yanlış Yaptığın Sorular"
+          questions={wrongQuestions}
+          onSeeMore={() => console.log("See more wrong questions")}
+          emptyMessage="Henüz yanlış yaptığın soru bulunmuyor 🎉"
+          showBookmarkChip={true}
+          onQuestionPress={handleQuestionPress}
+        />
+
+        {/* Bookmarked Questions Carousel */}
+        <QuestionCarousel
+          title="İşaretlediğin Sorular"
+          questions={bookmarkedQuestions}
+          onSeeMore={() => console.log("See more bookmarked questions")}
+          emptyMessage="Henüz işaretlediğin soru bulunmuyor"
+          showBookmarkChip={false}
+          onQuestionPress={handleQuestionPress}
+        />
+      </ScrollView>
+
+      {/* Question Modal */}
+      <QuestionModal
+        visible={isModalVisible}
+        question={selectedQuestion}
+        onDismiss={handleModalDismiss}
+      />
     </ThemedView>
   );
 }
@@ -38,34 +92,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  centerContainer: {
+  scrollView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 24,
   },
-  developmentCard: {
-    width: "100%",
-    maxWidth: 400,
-  },
-  cardContent: {
-    alignItems: "center",
-    paddingVertical: 32,
-  },
-  title: {
-    marginTop: 16,
-    marginBottom: 8,
-    textAlign: "center",
-    fontFamily: "Poppins_700Bold",
-  },
-  subtitle: {
-    marginBottom: 16,
-    textAlign: "center",
-    fontFamily: "Poppins_600SemiBold",
-  },
-  description: {
-    textAlign: "center",
-    opacity: 0.8,
-    lineHeight: 20,
+  contentContainer: {
+    paddingBottom: 20,
   },
 });
