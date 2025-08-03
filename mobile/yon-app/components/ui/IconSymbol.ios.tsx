@@ -18,6 +18,8 @@ const MAPPING = {
   "person.fill": "account",
   "questionmark.folder": "file-question-outline",
   "chart.line.uptrend.xyaxis": "chart-line",
+  "bell.fill": "bell",
+  "calendar": "calendar",
 } as const;
 
 export function IconSymbol({

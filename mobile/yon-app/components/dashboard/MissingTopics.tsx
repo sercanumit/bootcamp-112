@@ -80,10 +80,20 @@ function TopicItem({
   );
 }
 
-export function MissingTopics() {
+interface MissingTopicsProps {
+  topics?: string[];
+}
+
+export function MissingTopics({ topics }: MissingTopicsProps) {
   const theme = useAppTheme();
 
-  const missingTopics = [
+  // Default topics if not provided
+  const missingTopics = topics?.length ? topics.map((topic, index) => ({
+    subject: ["Matematik", "Fizik", "Kimya"][index % 3],
+    topic: topic,
+    difficulty: (["Kolay", "Orta", "Zor"] as const)[index % 3],
+    questionCount: Math.floor(Math.random() * 30) + 10,
+  })) : [
     {
       subject: "Matematik",
       topic: "Türev Uygulamaları",

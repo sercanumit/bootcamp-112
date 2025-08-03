@@ -1,138 +1,149 @@
-import { StyleSheet, View } from "react-native";
-import { Text, Avatar, IconButton, Badge, Divider } from "react-native-paper";
-import { ThemedView } from "@/components/ThemedView";
-import { useAppTheme } from "@/constants/PaperTheme";
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Avatar } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '@/hooks/useAuth';
+import { notificationsAPI } from '@/services/api';
+import { NotificationPreviewModal } from './NotificationPreviewModal';
 
-export function DashboardHeader() {
-  const theme = useAppTheme();
+interface DashboardHeaderProps {
+  userName?: string;
+}
+
+export function DashboardHeader({ userName }: DashboardHeaderProps) {
+  const theme = useTheme();
+  const { user } = useAuth();
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [notificationModalVisible, setNotificationModalVisible] = useState(false);
+
+  useEffect(() => {
+    loadNotificationCount();
+    
+    // Her 30 saniyede bir güncelle (BottomNavigation ile aynı)
+    const interval = setInterval(loadNotificationCount, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadNotificationCount = async () => {
+    try {
+      const response = await notificationsAPI.getNotificationStats();
+      if (response.success && response.data) {
+        setNotificationCount(response.data.unread_count || 0);
+      }
+    } catch (error) {
+      console.error('Bildirim sayısı alınamadı:', error);
+    }
+  };
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Günaydın';
+    if (hour < 18) return 'İyi günler';
+    return 'İyi akşamlar';
+  };
+
+  const handleNotificationPress = () => {
+    console.log('🎯 Profile logo tıklandı!');
+    console.log('🎯 Notification count:', notificationCount);
+    console.log('🎯 Modal visible olacak:', true);
+    setNotificationModalVisible(true);
+    // Bildirim sayısını hemen sıfırla
+    setNotificationCount(0);
+  };
 
   return (
-    <ThemedView style={styles.container}>
-      {/* Header */}
-      <View style={styles.headerContent}>
-        {/* Profil */}
-        <View style={styles.profileSection}>
-          <View style={styles.avatarContainer}>
-            <Avatar.Image
-              size={48}
-              source={{ uri: "https://picsum.photos/20" }}
-              style={styles.avatar}
-            />
-            <Badge
-              visible={true}
-              style={[
-                styles.onlineBadge,
-                { backgroundColor: theme.colors.primary },
-              ]}
-              size={12}
-            />
-          </View>
-          <View style={styles.profileInfo}>
-            <Text variant="titleMedium" style={styles.name}>
-              Ahmet Yılmaz
-            </Text>
-            <View style={styles.profileDetails}>
-              <Text variant="bodySmall" style={styles.classText}>
-                12. Sınıf • Tıp Fakültesi
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.actionButtons}>
-          <IconButton
-            icon="bell-outline"
-            mode="contained-tonal"
-            size={20}
-            onPress={() => {}}
-            style={styles.actionButton}
-          />
-          <IconButton
-            icon="cog-outline"
-            mode="contained-tonal"
-            size={20}
-            onPress={() => {}}
-            style={styles.actionButton}
-          />
-        </View>
-      </View>
-
-      {/* Motivasyon  */}
-      <View style={styles.motivationContainer}>
-        <Text variant="bodyMedium" style={styles.motivationText}>
-          "Her büyük başarı küçük adımlarla başlar"
+    <View style={styles.container}>
+      {/* Greeting */}
+      <View style={styles.greetingContainer}>
+        <Text style={styles.greeting}>
+          {getGreeting()}, {userName || user?.displayName || 'Kullanıcı'}!
         </Text>
       </View>
 
-      <Divider style={styles.divider} />
-    </ThemedView>
+      {/* Profile Picture with Notification Badge */}
+      <TouchableOpacity 
+        style={styles.profileContainer}
+        onPress={handleNotificationPress}
+        activeOpacity={0.7}
+      >
+        <View style={styles.avatarContainer}>
+          <Avatar.Image
+            size={50}
+            source={require('@/assets/images/profile/profile.jpg')}
+            style={styles.avatar}
+          />
+          {notificationCount > 0 && (
+            <View style={[styles.badge, { backgroundColor: theme.colors.error }]}>
+              <Text style={[styles.badgeText, { color: theme.colors.onError }]}>
+                {notificationCount > 99 ? '99+' : notificationCount}
+              </Text>
+            </View>
+          )}
+        </View>
+      </TouchableOpacity>
+
+      {/* Notification Modal */}
+      <NotificationPreviewModal
+        visible={notificationModalVisible}
+        onClose={async () => {
+          setNotificationModalVisible(false);
+          // Tüm bildirimleri okundu olarak işaretle
+          try {
+            await notificationsAPI.markAllNotificationsAsRead();
+            setNotificationCount(0);
+          } catch (error) {
+            console.error('Bildirimler okundu olarak işaretlenemedi:', error);
+          }
+        }}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    paddingTop: 50,
-    gap: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: '#fff',
   },
-  headerContent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  profileSection: {
-    flexDirection: "row",
-    alignItems: "center",
+  greetingContainer: {
     flex: 1,
+  },
+  greeting: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  profileContainer: {
+    alignItems: 'center',
   },
   avatarContainer: {
-    position: "relative",
-    marginRight: 16,
+    position: 'relative',
   },
   avatar: {
-    backgroundColor: "#f0f0f0",
-  },
-  onlineBadge: {
-    position: "absolute",
-    bottom: 2,
-    right: 2,
     borderWidth: 2,
-    borderColor: "#fff",
+    borderColor: '#f0f0f0',
   },
-  profileInfo: {
-    flex: 1,
+  badge: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    borderRadius: 12,
+    minWidth: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 6,
+    borderWidth: 2,
+    borderColor: '#fff',
   },
-  name: {
-    marginBottom: 4,
-    fontWeight: "600",
-  },
-  profileDetails: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  classText: {
-    fontSize: 13,
-    opacity: 0.7,
-  },
-  actionButtons: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  actionButton: {
-    margin: 0,
-  },
-  motivationContainer: {
-    paddingTop: 8,
-    paddingHorizontal: 4,
-  },
-  motivationText: {
-    textAlign: "center",
-    fontStyle: "italic",
-    opacity: 0.8,
-    fontSize: 14,
-  },
-  divider: {
-    marginTop: 8,
-    opacity: 0.3,
+  badgeText: {
+    fontSize: 10,
+    fontWeight: 'bold',
   },
 });
