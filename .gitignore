@@ -81,6 +81,12 @@ Thumbs.db
 # Firebase
 google-services.json
 GoogleService-Info.plist
+firebase-service.json
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!eas.json
 
 # Logs
 *.log
