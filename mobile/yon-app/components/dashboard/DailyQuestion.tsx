@@ -5,18 +5,32 @@ import { DifficultyBadge } from "@/components/ui/DifficultyBadge";
 import { useAppTheme } from "@/constants/PaperTheme";
 import { useState } from "react";
 
-export function DailyQuestion() {
+interface DailyQuestionProps {
+  question?: {
+    id: string;
+    question: string;
+    options: string[];
+    subject: string;
+    difficulty: 'easy' | 'medium' | 'hard';
+  };
+  onAnswer?: (questionId: string, answer: string) => void;
+}
+
+export function DailyQuestion({ question, onAnswer }: DailyQuestionProps) {
   const theme = useAppTheme();
   const [selectedOption, setSelectedOption] = useState("");
 
-  const currentDifficulty = "Orta";
-  const options = [
-    { text: "x = 0" },
-    { text: "x = 1/3" },
-    { text: "x = 2" },
-    { text: "x = 1" },
-    { text: "x = -1" },
-  ];
+  // Default values if question not provided
+  const currentQuestion = question ?? {
+    id: 'default-1',
+    question: 'f(x) = x³ - 3x² + 2x + 1 fonksiyonunun yerel minimum noktasının x koordinatı kaçtır?',
+    options: ['x = 0', 'x = 1/3', 'x = 2', 'x = 1', 'x = -1'],
+    subject: 'Matematik',
+    difficulty: 'medium' as const,
+  };
+
+  const currentDifficulty = currentQuestion.difficulty === 'easy' ? 'Kolay' : 
+                           currentQuestion.difficulty === 'medium' ? 'Orta' : 'Zor';
 
   // Şık harflerini oluştur (A, B, C, D, E, ...)
   const getOptionLetter = (index: number) => String.fromCharCode(65 + index);
@@ -37,13 +51,13 @@ export function DailyQuestion() {
                 variant="titleMedium"
                 style={[styles.subject, { color: theme.colors.primary }]}
               >
-                Matematik
+                {currentQuestion.subject}
               </Text>
               <Text
                 variant="bodySmall"
                 style={[styles.topic, { color: theme.colors.onSurfaceVariant }]}
               >
-                Türev Uygulamaları
+                Günün Sorusu
               </Text>
             </View>
             <DifficultyBadge difficulty={currentDifficulty} size="small" />
@@ -51,8 +65,7 @@ export function DailyQuestion() {
 
           <View style={styles.questionContent}>
             <Text variant="bodyLarge" style={styles.questionText}>
-              f(x) = x³ - 3x² + 2x + 1 fonksiyonunun yerel minimum noktasının x
-              koordinatı kaçtır?
+              {currentQuestion.question}
             </Text>
           </View>
 
@@ -60,12 +73,12 @@ export function DailyQuestion() {
             onValueChange={setSelectedOption}
             value={selectedOption}
           >
-            {options.map((option, index) => {
+            {currentQuestion.options.map((option, index) => {
               const optionLetter = getOptionLetter(index);
               return (
                 <View key={`option-${index}`} style={styles.optionContainer}>
                   <RadioButton.Item
-                    label={`${optionLetter}) ${option.text}`}
+                    label={`${optionLetter}) ${option}`}
                     value={`option-${index}`}
                     style={styles.radioItem}
                     labelStyle={styles.optionText}

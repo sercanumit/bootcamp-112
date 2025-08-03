@@ -5,14 +5,23 @@ import { useAppTheme } from "@/constants/PaperTheme";
 import { PieChart } from "react-native-gifted-charts";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 
-export function DashboardStats() {
+interface DashboardStatsProps {
+  stats?: {
+    totalQuestions: number;
+    correctAnswers: number;
+    wrongAnswers: number;
+    accuracy: number;
+  };
+}
+
+export function DashboardStats({ stats }: DashboardStatsProps) {
   const theme = useAppTheme();
 
-  // Donut chart verileri
-  const correctAnswers = 973;
-  const wrongAnswers = 274;
-  const totalQuestions = correctAnswers + wrongAnswers;
-  const correctPercentage = Math.round((correctAnswers / totalQuestions) * 100);
+  // Default values if stats not provided
+  const correctAnswers = stats?.correctAnswers ?? 973;
+  const wrongAnswers = stats?.wrongAnswers ?? 274;
+  const totalQuestions = stats?.totalQuestions ?? (correctAnswers + wrongAnswers);
+  const correctPercentage = stats?.accuracy ?? Math.round((correctAnswers / totalQuestions) * 100);
 
   const pieData = [
     {

@@ -30,6 +30,8 @@ const MAPPING = {
   "person.fill": "account",
   "questionmark.folder": "file-question-outline",
   "chart.line.uptrend.xyaxis": "chart-line",
+  "globe": "google",
+  "calendar": "calendar",
 } as const;
 
 /**
