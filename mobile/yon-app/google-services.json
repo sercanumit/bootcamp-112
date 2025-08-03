@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "801736117271",
+    "project_id": "directionapp-ec3b6",
+    "storage_bucket": "directionapp-ec3b6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:801736117271:android:dd99eced8c63594fd86052",
+        "android_client_info": {
+          "package_name": "com.directionapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNSe4iKEx5_O0ULLuwSabuMbPAppC-gIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
