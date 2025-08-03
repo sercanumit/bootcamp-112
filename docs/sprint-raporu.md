@@ -56,6 +56,7 @@
 
 - [1. Sprint](#1-sprint)
 - [2. Sprint](#2-sprint)
+- [3. Sprint](#3-sprint)
 
 <details id="1-sprint">
 <summary>1. Sprint</summary>
@@ -215,5 +216,91 @@ Bu sprint itibarıyla kodlama aşamasına geçilmiştir. Mobil uygulamanın ilk 
 - Takımın tamamının sürece dahil olamaması, sprint planlamasının ve hedeflerin gerçekçiliğini sorgulattı. Gelecek sprintlerde **rol ve sorumlulukların** daha net belirlenmesi gerektiği anlaşıldı.
 - WhatsApp üzerinden yapılan günlük güncellemeler hızlı olsa da, karmaşık konular için Slack veya yüz yüze toplantıların daha verimli olduğu görüldü.
 - Gelecek sprint için takımın katılım durumuna göre daha **gerçekçi bir hedef** belirlenmesi kararlaştırıldı.
+
+</details>
+
+<details id="3-sprint">
+<summary>3. Sprint</summary>
+
+##### Sprint Tarihleri
+
+- Başlangıç: 21.07.2025
+- Bitiş: 03.08.2025
+
+#### Sprint Notları
+
+- Bu sprintte kapsamlı backend geliştirme çalışmaları gerçekleştirildi. **Notifications (Bildirimler)**, **Quick Solutions (Hızlı Çözümler)**, **MindMaps (Zihin Haritaları)** ve **Flashcards** modülleri backend'de tam olarak kodlandı ve API endpointleri hazırlandı.
+- Django tabanlı backend altyapısı güçlendirildi ve Firebase entegrasyonu tamamlandı. **Gemini AI** entegrasyonu ile kullanıcıların sorularına otomatik çözüm üretme sistemi geliştirildi.
+- Mobil uygulama tarafında yeni ekranlar ve bileşenler eklendi. **AI destekli zihin haritası oluşturma**, **bildirim sistemi**, **hızlı soru çözümü** gibi core özellikler UI/UX ile birlikte tamamlandı.
+
+#### Sprint İçinde Tamamlanması Tahmin Edilen Puan
+
+- **Tahmini Puan:** 75
+- **Açıklama:** Bu sprintte, proje teslim tarihine yaklaşıldığı için **75 story point**'lik yoğun bir iş planlandı. Yalnızca Sercan ve Yusuf'un aktif katkısıyla büyük oranda hedefe ulaşıldı.
+
+#### Puan Tamamlama Mantığı
+
+- İlk iki sprintte toplam 79 puanlık iş tamamlanabildi. Kalan 75 puanın bu final sprintinde tamamlanması hedeflendi. Takım üyelerinin çoğunun katılım sağlayamaması nedeniyle sadece iki kişiyle yoğun çalışma yapılarak hedefe ulaşılmaya çalışıldı.
+
+### Daily Scrum
+
+- Daily Scrum toplantıları yine WhatsApp üzerinden yazılı olarak sürdürüldü. Teknik sorunlar ve özellik geliştirmeleri konusunda sürekli iletişim halinde kalındı.
+
+#### Sprint Board Screenshotları
+
+<details>
+<summary>Görsel 1</summary>
+
+![Sprint 3 Board](./images/board2.png)
+
+</details>
+
+### Ürün Durumu: Ekran Görüntüleri
+
+Bu sprint itibarıyla projenin core özellikleri büyük oranda tamamlanmıştır. Backend API'leri çalışır durumdadır ve mobil uygulamanın temel işlevleri geliştirilmiştir.
+
+<details>
+<summary>📱 Mobil Uygulama Ekran Görüntüleri</summary>
+
+![Uygulama Ekranı 1](./images/app-1.jpeg)
+![Uygulama Ekranı 2](./images/app-2.jpeg)
+
+</details>
+
+#### Tamamlanan Özellikler
+
+**Backend Geliştirmeleri:**
+
+- ✅ Notifications (Bildirimler) sistemi ve admin paneli
+- ✅ Quick Solutions (Hızlı Çözümler) API'leri ve Gemini AI entegrasyonu
+- ✅ MindMaps (Zihin Haritaları) oluşturma ve görüntüleme
+- ✅ Flashcards modülü temel yapısı
+- ✅ Firebase Authentication ve Firestore entegrasyonu
+- ✅ Django Admin panel konfigürasyonları
+
+**Mobil Uygulama Geliştirmeleri:**
+
+- ✅ AI destekli zihin haritası oluşturucu ekranı
+- ✅ Zihin haritası görüntüleyici (interaktif node sistemi)
+- ✅ Bildirim önizleme modalı ve yönetim sistemi
+- ✅ Hızlı soru çözümü modalı (kamera ile soru çekme)
+- ✅ Flashcard kutusu temel arayüzü
+- ✅ Dashboard üzerinde bildirim entegrasyonu
+
+#### Sprint Review
+
+- Bu sprintte **backend altyapısı büyük oranda tamamlandı**. Django modellerinden API endpointlerine kadar tüm temel yapı hazır durumda.
+- **Gemini AI entegrasyonu** başarılı şekilde gerçekleştirildi. Kullanıcılar artık soru fotoğrafı yükleyerek AI destekli çözüm alabilir.
+- **Zihin haritası oluşturma** özelliği hem backend hem de mobil tarafta tam olarak çalışır durumda.
+- Takım üyelerinden **sadece Sercan ve Yusuf aktif** katılım sağladı. Diğer üyeler sprint boyunca hiç dahil olmadı.
+- Proje **ana özellikler bakımından büyük oranda tamamlandı** ancak polish ve test süreçleri için daha fazla zamana ihtiyaç var.
+
+#### Sprint Retrospective
+
+- **İki kişilik takımla** bu kadar kapsamlı çalışma yapmak zorlu oldu ancak başarılı sonuçlar elde edildi.
+- **Proje yönetimi** konusunda daha sıkı takip gerektiği ve **takım katılımının** kritik önem taşıdığı anlaşıldı.
+- **Teknik debt** oluşmaması için kod kalitesi ve dokumentasyon konularına dikkat edildi.
+- **AI entegrasyonları** beklenenden daha başarılı çalıştı ve kullanıcı deneyimini önemli ölçüde artırdı.
+- Gelecekte benzer projelerde **takım commitment'ı** ve **iş dağılımının** daha net belirlenmesi gerekiyor.
 
 </details>
